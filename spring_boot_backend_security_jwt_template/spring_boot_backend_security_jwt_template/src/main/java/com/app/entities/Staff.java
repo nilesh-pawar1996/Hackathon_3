@@ -1,97 +1,54 @@
 package com.app.entities;
 
-import java.time.LocalDateTime;
+
+import java.util.Collection;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Data;
+
 @Entity
-public class Staff {
-
+@Data
+public class Staff implements UserDetails {
+	private static final long serialVersionUID = 1L;
 	@Id
-	private String userid;
-	private String uname;
-	private String pwd;
-	private String phone;
-	private String gender;
-	private String address;
-	private String staffid;
-	private LocalDateTime createdon;
-	
-	public Staff() {
-		this.createdon=LocalDateTime.now();
-	}
-
-	public String getUserid() {
-		return userid;
-	}
-
-	public void setUserid(String userid) {
-		this.userid = userid;
-	}
-
-	public String getUname() {
-		return uname;
-	}
-
-	public void setUname(String uname) {
-		this.uname = uname;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getStaffid() {
-		return staffid;
-	}
-
-	public void setStaffid(String staffid) {
-		this.staffid = staffid;
-	}
-
-	public LocalDateTime getCreatedon() {
-		return createdon;
-	}
-
-	public void setCreatedon(LocalDateTime createdon) {
-		this.createdon = createdon;
-	}
-
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int staffId;
+	private String name;
+	private String email;
+	private String password;
+	private String role;
 	@Override
-	public String toString() {
-		return "Staff [userid=" + userid + ", uname=" + uname + ", pwd=" + pwd + ", phone=" + phone + ", gender="
-				+ gender + ", address=" + address + ", staffid=" + staffid + ", createdon=" + createdon + "]";
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return AuthorityUtils.createAuthorityList(this.role);
 	}
-	
-	
+	@Override
+	public String getUsername() {
+		return this.getEmail();
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
 }
 
