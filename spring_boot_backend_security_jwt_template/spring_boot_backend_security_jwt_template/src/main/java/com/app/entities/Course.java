@@ -1,4 +1,4 @@
-package com.app.entity;
+package com.app.entities;
 
 
 import javax.persistence.Entity;
@@ -27,7 +27,7 @@ import javax.persistence.Id;
 		}
 		@Override
 		public String toString() {
-			return "Course [id=" + id + ", coursename=" + coursename + "]";
+			return "Course id=" + id + ", coursename=" + coursename + "]";
 		}
 		
 		

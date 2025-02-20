@@ -1,5 +1,6 @@
 package com.app.entities;
 
+
 import java.util.Collection;
 
 import javax.persistence.Entity;
@@ -48,5 +49,6 @@ public class Staff implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
 }
 
