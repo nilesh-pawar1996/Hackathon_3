@@ -1,5 +1,10 @@
 package com.app.services;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.app.daos.StaffDao;
 import com.app.entities.Staff;
 import com.app.models.Credentials;
+import com.app.models.StaffDTO;
 
 @Service
 public class StaffService implements UserDetailsService {
@@ -17,10 +23,12 @@ public class StaffService implements UserDetailsService {
 	private StaffDao staffDao;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ModelMapper modelMapper;
 
-	public Staff getStaffByEmail(String email) {
+	public StaffDTO getStaffByEmail(String email) {
 		Staff dbStaff = staffDao.findByEmail(email);
-		return dbStaff;
+		return modelMapper.map(dbStaff, StaffDTO.class);
 	}
 	
 	public Staff getStaffByCredentials(Credentials cr) {
@@ -36,5 +44,22 @@ public class StaffService implements UserDetailsService {
 		if(dbUser == null)
 			throw new UsernameNotFoundException("No user exists!");
 		return dbUser;
+	}
+
+	public List<StaffDTO> findAllStaff() {
+		List<Staff> list = staffDao.findAll();
+		return list.stream()
+			.map(staffEntity -> modelMapper.map(staffEntity, StaffDTO.class))
+			.collect(Collectors.toList());
+	}
+
+	public StaffDTO getStaffById(int staffId) {
+		Staff dbStaff = staffDao.findById(staffId).orElse(null);
+		return modelMapper.map(dbStaff, StaffDTO.class);
+	}
+
+	public StaffDTO getStaffByName(String name) {
+		Staff dbStaff = staffDao.findByName(name);
+		return modelMapper.map(dbStaff, StaffDTO.class);
 	}
 }

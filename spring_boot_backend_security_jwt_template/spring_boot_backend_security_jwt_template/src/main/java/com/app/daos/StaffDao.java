@@ -8,4 +8,6 @@ public interface StaffDao extends JpaRepository<Staff, Integer> {
 
 	Staff findByEmail(String email);
 
+	Staff findByName(String name);
+
 }
